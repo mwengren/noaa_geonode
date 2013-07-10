@@ -3,7 +3,6 @@
 geonode.conf
 noaa_geonode.egg-info/
 noaa_geonode/local_settings.py
-noaa_geonode/geonode.wsgi
 
 #supporting stuff pulled in by paver
 downloaded
