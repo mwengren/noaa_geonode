@@ -10,18 +10,15 @@ This is where you can override the hero area block. You can simply modify the co
 {% endcomment %}
   {% block hero %}
   <div class="hero-unit">
-    <h1>{% trans "Welcome" %}</h1>
+    <h1>{% trans "Welcome to NOAAnode" %}</h1>
     <div class="hero-unit-content">
       <div class="intro">
         <p>
           {% blocktrans %}
-            NOAAnode is data catalog for data  spatial data hosted on NOAA's OGC web service hosting environment.  
-			This site allows users to search, preview and link to spatial data served from the web services located at 
-			<a href="http://services.ogc.noaa.gov">http://services.ogc.noaa.gov</a>.  For NOAA users interested in learning more, 
-			see the informational Google Site <a href="https://sites.google.com/a/noaa.gov/noaa-open-source-gis/noaa-hpcc-shared-hosting">here</a>
+            NOAAnode is data catalog for data hosted on NOAA's OGC web service hosting environment.  This site allows users to search, preview and link to spatial data served from the web services located at <a href="http://services.ogc.noaa.gov">http://services.ogc.noaa.gov</a>.  For NOAA users interested in learning more, see the informational Google Site <a href="https://sites.google.com/a/noaa.gov/noaa-open-source-gis/noaa-hpcc-shared-hosting">here</a>
           {% endblocktrans %}
         </p>
-        <span>{% trans 'More general info on GIS at NOAA: ' %} <a href="https://sites.google.com/a/noaa.gov/gis-community/">{% trans 'NOAA GIS Community' %}</a></span>
+        <span>{% trans 'For more info on GIS at NOAA, see: ' %} <a href="https://sites.google.com/a/noaa.gov/gis-community/">{% trans 'NOAA GIS Community' %}</a></span>
       </div>
       <div class="btns">
         <a class="btn btn-large" href="{% url "layer_browse" %}">
