@@ -1,0 +1,29 @@
+.nav-logo {
+	width: 220px;
+	/*height: 29px;*/
+	background: url(../img/noaanode_logo.png) no-repeat;
+}
+
+.navbar .navbar-inner {
+	/*background: #0961a8;*/
+	background: #327eb8;
+	/*background: #3f8ac4;*/
+	
+}
+
+
+
+.nav-box {
+	 background: #ffffff;
+}
+
+footer.footer {
+	background: #0961a8;
+	/*background: #3f8ac4;*/
+}
+
+
+section.widget h2 {
+	background: #8eb3cf;
+}
+
