@@ -20,7 +20,7 @@ setup(
     keywords="noaa_geonode geonode django",
     url='https://github.com/noaa_geonode/noaa_geonode',
     packages=['noaa_geonode',],
-    install_requires=["geonode==2.0b28"],
+    install_requires=["geonode==2.0b30"],
     include_package_data=True,
     zip_safe=False,
 )
