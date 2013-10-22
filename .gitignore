@@ -7,7 +7,6 @@ noaa_geonode.egg-info/
 noaa_geonode/development.db
 noaa_geonode/local_settings.py
 noaa_geonode/uploaded/thumbs/*.png
-noaa_geoserver_updatelayers_crontab
 
 #supporting stuff pulled in by paver
 downloaded
