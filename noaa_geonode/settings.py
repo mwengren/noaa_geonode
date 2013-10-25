@@ -201,11 +201,15 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {
-            'format': '%(message)s',        },
+            'format': '%(message)s', },
     },
     'filters': {
         'require_debug_false': {
@@ -216,6 +220,14 @@ LOGGING = {
         'null': {
             'level':'ERROR',
             'class':'django.utils.log.NullHandler',
+        },
+        'logfile': {
+         'level':'DEBUG',
+         'class':'logging.handlers.RotatingFileHandler',
+             'filename':PROJECT_ROOT + "/debug.log",
+         'maxBytes': 1000000,
+         'backupCount': 2,
+         'formatter': 'standard'        
         },
         'console':{
             'level':'ERROR',
@@ -234,10 +246,9 @@ LOGGING = {
             "level": "ERROR",
         },
         "geonode": {
-            "handlers": ["console"],
-            "level": "ERROR",
+            "handlers": ["console", "logfile"],
+            "level": "DEBUG",
         },
-
         "gsconfig.catalog": {
             "handlers": ["console"],
             "level": "ERROR",
