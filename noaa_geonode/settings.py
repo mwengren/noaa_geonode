@@ -137,14 +137,46 @@ LOGIN_URL = '/account/login/'
 LOGOUT_URL = '/account/logout/'
 
 # Activate the Documents application
-DOCUMENTS_APP = True
 ALLOWED_DOCUMENT_TYPES = [
-    'doc', 'docx', 'xls', 'xslx', 'pdf', 'zip', 'jpg', 'jpeg', 'tif', 'tiff', 'png', 'gif', 'txt'
+    'doc', 'docx','gif', 'jpg', 'jpeg', 'ods', 'odt', 'pdf', 'png', 'ppt',
+    'rar', 'tif', 'tiff', 'txt', 'xls', 'xlsx', 'xml', 'zip',
 ]
 MAX_DOCUMENT_SIZE = 2 # MB
 
 
+GEONODE_APPS = (
+
+
+    # GeoNode internal apps
+    'geonode.people',
+    'geonode.base',
+    'geonode.layers',
+    'geonode.maps',
+    'geonode.proxy',
+    'geonode.security',
+    'geonode.social',
+    'geonode.catalogue',
+    'geonode.documents',
+    'geonode.api',
+    'geonode.groups',
+    'geonode.services',
+
+    # GeoNode Contrib Apps
+    
+    #'geonode.contrib.dynamic',
+
+    # GeoServer Apps
+    # Geoserver needs to come last because
+    # it's signals may rely on other apps' signals.
+    'geonode.geoserver',
+    'geonode.upload',
+)
+
 INSTALLED_APPS = (
+
+    # Boostrap admin theme
+    # 'django_admin_bootstrapped.bootstrap3',
+    # 'django_admin_bootstrapped',
 
     # Apps bundled with Django
     'django.contrib.auth',
@@ -156,6 +188,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django.contrib.humanize',
+    'django.contrib.gis',
 
     # Third party apps
 
@@ -163,10 +196,14 @@ INSTALLED_APPS = (
     'pagination',
     'taggit',
     'taggit_templatetags',
-    'south',
     'friendlytagloader',
     'geoexplorer',
+    'leaflet',
     'django_extensions',
+    #'haystack',
+    'autocomplete_light',
+    'mptt',
+    'modeltranslation',
 
     # Theme
     "pinax_theme_bootstrap_account",
@@ -182,20 +219,11 @@ INSTALLED_APPS = (
     'announcements',
     'actstream',
     'user_messages',
+    'tastypie',
+    'polymorphic',
+    'guardian',
 
-    # GeoNode internal apps
-    'geonode.people',
-    'geonode.base',
-    'geonode.layers',
-    'geonode.upload',
-    'geonode.maps',
-    'geonode.proxy',
-    'geonode.security',
-    'geonode.search',
-    'geonode.social',
-    'geonode.catalogue',
-    'geonode.documents',
-)
+) + GEONODE_APPS
 
 LOGGING = {
     'version': 1,
@@ -283,10 +311,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'account.context_processors.account',
-    'pinax_theme_bootstrap_account.context_processors.theme',
     # The context processor below adds things like SITEURL
     # and GEOSERVER_BASE_URL to all pages that use a RequestContext
     'geonode.context_processors.resource_urls',
+    'geonode.geoserver.context_processors.geoserver_urls',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -299,30 +327,16 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # This middleware allows to print private layers for the users that have 
-    # the permissions to view them.
-    # It sets temporary the involved layers as public before restoring the permissions.
-    # Beware that for few seconds the involved layers are public there could be risks.
-    #'geonode.middleware.PrintProxyMiddleware',
 )
 
 
 # Replacement of default authentication backend in order to support
 # permissions per object.
-AUTHENTICATION_BACKENDS = ('geonode.security.auth.GranularBackend',)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend','guardian.backends.ObjectPermissionBackend',)
 
-def get_user_url(u):
-    return u.profile.get_absolute_url()
+ANONYMOUS_USER_ID = -1
+GUARDIAN_GET_INIT_ANONYMOUS_USER = 'geonode.people.models.get_anonymous_user_instance'
 
-
-ABSOLUTE_URL_OVERRIDES = {
-    'auth.user': get_user_url
-}
-
-# Redirects to home page after login
-# FIXME(Ariel): I do not know why this setting is needed,
-# it would be best to use the ?next= parameter
-LOGIN_REDIRECT_URL = "/"
 
 #
 # Settings for default search size
@@ -349,18 +363,12 @@ AGON_RATINGS_CATEGORY_CHOICES = {
 
 # Activity Stream
 ACTSTREAM_SETTINGS = {
-    'MODELS': ('auth.user', 'layers.layer', 'maps.map', 'dialogos.comment'),
+    'MODELS': ('people.Profile', 'layers.layer', 'maps.map', 'dialogos.comment', 'documents.document', 'services.service'),
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': False,
     'USE_JSONFIELD': True,
     'GFK_FETCH_DEPTH': 1,
 }
-
-# For South migrations
-SOUTH_MIGRATION_MODULES = {
-    'avatar': 'geonode.migrations.avatar',
-}
-SOUTH_TESTS_MIGRATE=False
 
 # Settings for Social Apps
 AUTH_PROFILE_MODULE = 'people.Profile'
@@ -389,8 +397,12 @@ NOSE_ARGS = [
 
 SITEURL = "http://localhost:8000/"
 
-# Default TopicCategory to be used for resources. Use the slug field here
-DEFAULT_TOPICCATEGORY = 'location'
+USE_QUEUE = False
+
+DEFAULT_WORKSPACE = 'geonode'
+CASCADE_WORKSPACE = 'geonode'
+
+OGP_URL = "http://geodata.tufts.edu/solr/select"
 
 # Topic Categories list should not be modified (they are ISO). In case you 
 # absolutely need it set to True this variable
@@ -421,6 +433,7 @@ OGC_SERVER = {
         'WPS_ENABLED' : True,
         # Set to name of database in DATABASES dictionary to enable
         'DATASTORE': '', #'datastore',
+        'TIMEOUT': 10  # number of seconds to allow for HTTP requests
     }
 }
 
@@ -510,12 +523,6 @@ DEFAULT_MAP_CENTER = (0, 0)
 DEFAULT_MAP_ZOOM = 0
 
 MAP_BASELAYERS = [{
-    "source": {
-        "ptype": "gxp_wmscsource",
-        "url": OGC_SERVER['default']['LOCATION'] + "wms",
-        "restUrl": "/gs/rest"
-     }
-  },{
     "source": {"ptype": "gxp_olsource"},
     "type":"OpenLayers.Layer",
     "args":["No background"],
@@ -523,9 +530,9 @@ MAP_BASELAYERS = [{
     "fixed": True,
     "group":"background"
   }, {
-    "source": {"ptype": "gxp_olsource"},
+    "source": {"ptype": "gxp_osmsource"},
     "type":"OpenLayers.Layer.OSM",
-    "args":["OpenStreetMap"],
+    "name":"mapnik",
     "visibility": False,
     "fixed": True,
     "group":"background"
@@ -547,30 +554,33 @@ MAP_BASELAYERS = [{
     "group":"background"
   },{
     "source": {"ptype": "gxp_mapboxsource"},
-  }, {
-    "source": {"ptype": "gxp_olsource"},
-    "type":"OpenLayers.Layer.WMS",
-    "group":"background",
-    "visibility": False,
-    "fixed": True,
-    "args":[
-      "bluemarble",
-      "http://maps.opengeo.org/geowebcache/service/wms",
-      {
-        "layers":["bluemarble"],
-        "format":"image/png",
-        "tiled": True,
-        "tilesOrigin": [-20037508.34, -20037508.34]
-      },
-      {"buffer": 0}
-    ]
-
 }]
 
-LEAFLET_CONFIG = {
-    'TILES_URL': 'http://{s}.tile2.opencyclemap.org/transport/{z}/{x}/{y}.png'
-}
+if 'geonode.geoserver' in INSTALLED_APPS:
+    LOCAL_GEOSERVER = {
+        "source": {
+            "ptype": "gxp_wmscsource",
+            "url": OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms",
+            "restUrl": "/gs/rest"
+        }
+    }
+    baselayers = MAP_BASELAYERS
+    MAP_BASELAYERS = [LOCAL_GEOSERVER]
+    MAP_BASELAYERS.extend(baselayers)
 
+
+SOCIAL_BUTTONS = True
+
+
+#Enable Licenses User Interface
+#Regardless of selection, license field stil exists as a field in the Resourcebase model.
+#Detail Display: above, below, never
+#Metadata Options: verbose, light, never
+LICENSES = {
+    'ENABLED': True,
+    'DETAIL': 'above',
+    'METADATA': 'verbose',
+}
 
 # Require users to authenticate before using Geonode
 LOCKDOWN_GEONODE = False
@@ -581,11 +591,30 @@ AUTH_EXEMPT_URLS = ()
 if LOCKDOWN_GEONODE:
     MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + ('geonode.security.middleware.LoginRequiredMiddleware',)
 
-# Load more settings from a file called local_settings.py if it exists
-try:
-    from local_settings import *
-except ImportError:
-    pass
+
+# A tuple of hosts the proxy can send requests to.
+PROXY_ALLOWED_HOSTS = ()
+
+# The proxy to use when making cross origin requests.
+PROXY_URL = '/proxy/?url=' if DEBUG else None
+
+# Haystack Search Backend Configuration. To enable, first install the following:
+# - pip install django-haystack
+# - pip install pyelasticsearch
+# Set HAYSTACK_SEARCH to True
+# Run "python manage.py rebuild_index"
+
+HAYSTACK_SEARCH = False
+HAYSTACK_PERMISSIONS_POSTFILTER = False
+#HAYSTACK_CONNECTIONS = {
+# 'default': {
+# 'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+# 'URL': 'http://127.0.0.1:9200/',
+# 'INDEX_NAME': 'geonode',
+# },
+# }
+#HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+#HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 
 # Available download formats
 DOWNLOAD_FORMATS_METADATA = [
@@ -599,5 +628,59 @@ DOWNLOAD_FORMATS_RASTER = [
     'JPEG', 'PDF', 'PNG', 'ArcGrid', 'GeoTIFF', 'Gtopo30', 'ImageMosaic', 'KML',
     'View in Google Earth', 'Tiles',
 ]
+
+ACCOUNT_NOTIFY_ON_PASSWORD_CHANGE = False
+
+TASTYPIE_DEFAULT_FORMATS = ['json']
+
+# gravatar settings
+AUTO_GENERATE_AVATAR_SIZES = (20,32,80,100,140,200)
+
+# Number of results per page listed in the GeoNode search pages
+CLIENT_RESULTS_LIMIT = 100
+
+# Number of items returned by the apis 0 equals no limit
+API_LIMIT_PER_PAGE = 0
+
+LEAFLET_CONFIG = {
+'TILES': [
+    # Find tiles at:
+    # http://leaflet-extras.github.io/leaflet-providers/preview/
+
+    # Stamen toner lite.
+    ('Watercolor', 'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+    ('Toner Lite', 'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+],
+'PLUGINS': {
+    'esri-leaflet': {
+        'js': 'lib/js/esri-leaflet.js',
+        'auto-include': True,
+        },
+    }
+}
+
+CACHES = {
+    #DUMMY CACHE FOR DEVELOPMENT
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        },
+    #MEMCACHED EXAMPLE
+    # 'default': {
+    # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    # 'LOCATION': '127.0.0.1:11211',
+    # },
+    #FILECACHE EXAMPLE
+    # 'default': {
+    # 'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    # 'LOCATION': '/tmp/django_cache',
+    # }
+}
+
+
+# Load more settings from a file called local_settings.py if it exists
+try:
+    from local_settings import *
+except ImportError:
+    pass
 
 
