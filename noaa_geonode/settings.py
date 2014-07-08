@@ -75,9 +75,15 @@ LANGUAGES = (
 
 WSGI_APPLICATION = "noaa_geonode.wsgi.application"
 
+AUTH_USER_MODEL = 'people.Profile'
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+
+MODELTRANSLATION_LANGUAGES = ('en', 'es', )
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
