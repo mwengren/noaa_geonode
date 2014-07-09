@@ -321,6 +321,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     # and GEOSERVER_BASE_URL to all pages that use a RequestContext
     'geonode.context_processors.resource_urls',
     'geonode.geoserver.context_processors.geoserver_urls',
+    'noaa_geonode.context_processors.noaanode_urls',
 )
 
 MIDDLEWARE_CLASSES = (
