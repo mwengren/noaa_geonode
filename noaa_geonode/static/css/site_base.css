@@ -1,46 +1,60 @@
-.nav-logo {
+/*.nav-logo {
 	width: 220px;
 	height: 37px;
 	background: url(../img/noaanode_logo.png) no-repeat;
+}*/
+
+.navbar-brand {
+	width: 175px;
+	height: 32px;
+	background: url(../img/noaanode_logo_smaller.png) no-repeat;
 }
 
-/* force-hide the second level branding*/
-.navbar .brand {
-    display: none;
+.navbar-nav {
+	margin-left: 10px;
+}
+	
+
+/*
+.container {
+	padding-left: 0px;
+}
+*/
+
+.navbar-inverse {
+	background: #3f4a5f;
 }
 
-/*background color for top nav*/
-.navbar .navbar-inner {	
-	background: #327eb8;
+/*jumbotron: main page splash area*/
+.jumbotron {
+	background: #a7b5cd;
+	
 }
-
-/* top nav bar*/
-.nav-box {
-	 background: #ffffff;
+.jumbotron a {
+	color: #0b0e44;
 }
-
 
 footer.footer {
-	background: #336699;
+	background: #eef0f3;
 }
 
-/*css for main page layer list heading*/
-section.widget h2 {
-	background: #8eb3cf;
+/*category filter button in maps, layers*/
+nav.filter h4 {
+	/*background: #c4dff6;*/
+	background: #e1eef9;
+	border: 1px solid #CCCCCC;
+}
+nav.filter h4 a {
+	color: #0b0e44;
 }
 
-/*style the side nav menu items similar to theme*/
-#slide-pane h2 {
-	background: #8eb3cf;
+/*button styling, primary and default*/
+.btn-primary {
+	background: #fbfabb;
+	color: #0b0e44;
 }
 
-/*style page top tab bar in theme
-body.search #subnav-tabs a.search, body.upload #subnav-tabs a.upload, body.explore #subnav-tabs a.explore {
-	background: #8eb3cf;
+.btn-default {
+	background-color: #fbfabb;
 }
-*/
-/*style page top tab bar in theme
-body.data #subnav-tabs a, body.maps #subnav-tabs a, body.people #subnav-tabs a, body.documents #subnav-tabs a {
-	background: #8eb3cf;
-}
-*/
+

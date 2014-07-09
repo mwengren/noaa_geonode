@@ -1,9 +1,8 @@
 {% extends 'index.html' %}
 {% load i18n %}
-{% load maps_tags %}
-{% load layers_tags %}
 {% load pagination_tags %}
 {% load staticfiles %}
+{% load base_tags %}
 {% load url from future %}
 {% comment %}
 This is where you can override the hero area block. You can simply modify the content below or replace it wholesale to meet your own needs. 
@@ -12,6 +11,28 @@ This is where you can override the hero area block. You can simply modify the co
   {% block title %} {% trans "Welcome to " %} {{ SITE_NAME }} {% endblock %}
 
   {% block hero %}
+  <div class="jumbotron">
+    <div class="container">
+      <h2>{% trans "Welcome to NOAAnode" %}</h2>
+      <p style="margin: 0px 30px 10px 30px">
+      {% blocktrans %}
+      NOAAnode is data catalog for data hosted on NOAA's OGC web service hosting environment.  This site allows users to search, preview and link to spatial data served from the web services located at <a href="http://services.ogc.noaa.gov">http://services.ogc.noaa.gov</a>
+      {% endblocktrans %}
+      </p>
+      <p style="margin: 0px 30px 10px 30px">
+       {% blocktrans %}
+       For NOAA users interested in learning more about the OGC service hosting environment, see the informational Google Site <a href="https://sites.google.com/a/noaa.gov/noaa-open-source-gis/noaa-hpcc-shared-hosting">here</a>
+       {% endblocktrans %}
+      </p>
+      <span style="margin: 0px 30px 10px 30px">{% trans 'For more info on GIS at NOAA, refer to the Google site ' %} <a href="https://sites.google.com/a/noaa.gov/gis-community/">{% trans 'NOAA GIS Community' %}</a></span>
+      <br />
+      <span style="margin: 0px 30px 10px 30px">
+      {% trans 'NOAAnode is based on GeoNode, for more info:' %}
+      <a href="http://docs.geonode.org/en/latest/tutorials/users/quickstart/index.html">{% trans 'Getting Started with GeoNode' %}</a>
+      </span>
+    </div>
+  </div>
+  <!--  
   <div class="hero-unit">
     <h1>{% trans "Welcome to NOAAnode" %}</h1>
     <div class="hero-unit-content">
@@ -33,4 +54,5 @@ This is where you can override the hero area block. You can simply modify the co
       </div>
     </div>
   </div>
+  -->
   {% endblock %}
