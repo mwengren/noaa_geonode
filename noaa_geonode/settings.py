@@ -130,7 +130,7 @@ LOCALE_PATHS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'a&^=-5p=j06=n86!i!4o5ylgk_%t*nw*f08i&4wv71h^x1dw*4'
+SECRET_KEY = 'DEFINE_ME_LOCALLY'
 
 # Location of url mappings
 ROOT_URLCONF = 'noaa_geonode.urls'
