@@ -16,7 +16,7 @@ This is where you can override the hero area block. You can simply modify the co
       <h2>{% trans "Welcome to NOAAnode" %}</h2>
       <p style="margin: 0px 30px 10px 30px">
       {% blocktrans %}
-       NOAAnode is a prototype data catalog providing search and discovery of Open Geospatial Consortium (OGC)-compliant web services hosted on NOAA's web service hosting environment, accessed at the URL: <a href="http://services.ogc.noaa.gov" target="_blank">http://services.ogc.noaa.gov</a>.
+       NOAAnode is a prototype data catalog providing search and discovery of Open Geospatial Consortium (OGC)-compliant web services hosted on NOAA's web service hosting environment, available at the URL: <a href="http://services.ogc.noaa.gov" target="_blank">http://services.ogc.noaa.gov</a>.
       {% endblocktrans %}
       </p>
       <p style="margin: 0px 30px 10px 30px">
@@ -28,8 +28,8 @@ This is where you can override the hero area block. You can simply modify the co
       {% trans 'NOAAnode provides OGC' %} <a href="{{ SITEURL }}catalogue/csw?service=CSW&request=GetCapabilities&version=2.0.2" alt="NOAAnode CS-W Service" title="NOAAnode CS-W Service">{% trans 'CS-W' %}</a>{% trans ' service access to all hosted data sets for external catalog integration.' %}
       </p>
       <span style="display: block; margin: 20px 30px 0px 30px">
-       {% trans 'NOAA users looking for more information about NOAA&apos;s OGC web service hosting environment, refer to the intranet site: ' %} <a href="https://sites.google.com/a/noaa.gov/noaa-open-source-gis/noaa-hpcc-shared-hosting" alt="NOAA OGC web services site" title="NOAA OGC web services site">{% trans 'here' %}</a>
-       {% trans '. For more info on GIS at NOAA, refer to the Google site: ' %} <a href="https://sites.google.com/a/noaa.gov/gis-community/">{% trans 'NOAA GIS Community' %}</a>
+       {% trans 'NOAA users looking for more information about NOAA&apos;s OGC web service hosting environment, refer to the intranet site: ' %} <a href="https://sites.google.com/a/noaa.gov/noaa-open-source-gis/noaa-hpcc-shared-hosting" alt="NOAA HPCC Shared Hosting Project" title="NOAA HPCC Shared Hosting Project">{% trans 'NOAA HPCC Shared Hosting Project' %}</a>
+       {% trans '. More information about GIS programs at NOAA is available on the intranet site: ' %} <a href="https://sites.google.com/a/noaa.gov/gis-community/">{% trans 'NOAA GIS Community' %}</a>
        </span>
       <span style="display: block; margin: 10px 30px 10px 30px">
       {% trans 'NOAAnode is based on the open source GeoNode project. For more info on GeoNode, see:' %}
