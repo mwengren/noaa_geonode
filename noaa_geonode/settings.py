@@ -83,7 +83,7 @@ USE_I18N = True
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 
-MODELTRANSLATION_LANGUAGES = ('en', 'es', )
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('en',)
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -589,6 +589,8 @@ LICENSES = {
     'METADATA': 'verbose',
 }
 
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
 # Require users to authenticate before using Geonode
 LOCKDOWN_GEONODE = False
 
@@ -610,9 +612,11 @@ PROXY_URL = '/proxy/?url=' if DEBUG else None
 # - pip install pyelasticsearch
 # Set HAYSTACK_SEARCH to True
 # Run "python manage.py rebuild_index"
-
 HAYSTACK_SEARCH = False
-HAYSTACK_PERMISSIONS_POSTFILTER = False
+# Avoid permissions prefiltering
+SKIP_PERMS_FILTER = False
+# Update facet counts from Haystack
+HAYSTACK_FACET_COUNTS = False
 #HAYSTACK_CONNECTIONS = {
 # 'default': {
 # 'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
@@ -650,18 +654,28 @@ CLIENT_RESULTS_LIMIT = 100
 API_LIMIT_PER_PAGE = 0
 
 LEAFLET_CONFIG = {
-'TILES': [
-    # Find tiles at:
-    # http://leaflet-extras.github.io/leaflet-providers/preview/
+    'TILES': [
+        # Find tiles at:
+        # http://leaflet-extras.github.io/leaflet-providers/preview/
 
-    # Stamen toner lite.
-    ('Watercolor', 'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
-    ('Toner Lite', 'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
-],
-'PLUGINS': {
-    'esri-leaflet': {
-        'js': 'lib/js/esri-leaflet.js',
-        'auto-include': True,
+        # Stamen toner lite.
+        ('Watercolor',
+         'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+         'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+          <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; \
+          <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+          <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+        ('Toner Lite',
+         'http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png',
+         'Map tiles by <a href="http://stamen.com">Stamen Design</a>, \
+          <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; \
+          <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, \
+          <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'),
+    ],
+    'PLUGINS': {
+        'esri-leaflet': {
+            'js': 'lib/js/esri-leaflet.js',
+            'auto-include': True,
         },
     }
 }
